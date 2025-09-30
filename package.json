@@ -1,0 +1,22 @@
+{
+  "name": "onebigthing-app",
+  "version": "1.0.0",
+  "description": "One Big Thing - Daily Goal Tracking App",
+  "scripts": {
+    "build": "flutter build web --release",
+    "dev": "flutter run -d web-server --web-port 3000",
+    "deploy": "vercel --prod"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "flutter",
+    "web",
+    "goals",
+    "productivity",
+    "supabase"
+  ],
+  "author": "One Big Thing Team",
+  "license": "MIT"
+}

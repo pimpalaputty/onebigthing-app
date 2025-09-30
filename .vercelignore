@@ -1,0 +1,39 @@
+# Flutter specific
+.dart_tool/
+.packages
+.pub-cache/
+.pub/
+build/
+ios/
+android/
+linux/
+macos/
+windows/
+test/
+analysis_options.yaml
+pubspec.lock
+
+# IDE
+.vscode/
+.idea/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Environment
+.env
+.env.local
+.env.production
+
+# Git
+.git/
+.gitignore
+
+# Documentation
+README.md
+*.md
