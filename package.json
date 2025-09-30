@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "description": "One Big Thing - Daily Goal Tracking App",
   "scripts": {
-    "build": "flutter build web --release",
-    "dev": "flutter run -d web-server --web-port 3000",
+    "dev": "echo 'No dev command needed'",
     "deploy": "vercel --prod"
   },
   "engines": {
