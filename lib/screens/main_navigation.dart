@@ -53,7 +53,7 @@ class _MainNavigationState extends State<MainNavigation> {
         },
         destinations: _destinations,
         backgroundColor: Theme.of(context).colorScheme.surface,
-        indicatorColor: Theme.of(context).colorScheme.primary.withOpacity(0.2),
+        indicatorColor: Theme.of(context).colorScheme.primary.withValues(alpha: 0.2),
         labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
       ),
     );

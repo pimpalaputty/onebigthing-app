@@ -1,8 +1,10 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:logger/logger.dart';
 import '../models/daily_goal.dart';
 
 class GoalService {
   static final SupabaseClient _supabase = Supabase.instance.client;
+  static final Logger _logger = Logger();
 
   // Mai célok lekérése
   static Future<DailyGoal?> getTodaysGoals(String userId) async {
@@ -22,7 +24,7 @@ class GoalService {
 
       return DailyGoal.fromJson(response);
     } catch (e) {
-      print('Error getting today\'s goals: $e');
+      _logger.e('Error getting today\'s goals: $e');
       return null;
     }
   }
@@ -74,7 +76,7 @@ class GoalService {
         return DailyGoal.fromJson(response);
       }
     } catch (e) {
-      print('Error saving goals: $e');
+      _logger.e('Error saving goals: $e');
       return null;
     }
   }
@@ -88,7 +90,7 @@ class GoalService {
       // Először lekérjük a jelenlegi állapotot
       final response = await _supabase
           .from('daily_goals')
-          .select('$goalType, $goalType\_completed')
+          .select('$goalType, ${goalType}_completed')
           .eq('id', goalId)
           .single();
 
@@ -106,7 +108,7 @@ class GoalService {
 
       return newStatus;
     } catch (e) {
-      print('Error toggling goal completion: $e');
+      _logger.e('Error toggling goal completion: $e');
       return false;
     }
   }
@@ -128,7 +130,7 @@ class GoalService {
           .map((json) => DailyGoal.fromJson(json))
           .toList();
     } catch (e) {
-      print('Error getting previous goals: $e');
+      _logger.e('Error getting previous goals: $e');
       return [];
     }
   }
@@ -143,7 +145,7 @@ class GoalService {
 
       return true;
     } catch (e) {
-      print('Error deleting goal: $e');
+      _logger.e('Error deleting goal: $e');
       return false;
     }
   }
@@ -159,7 +161,7 @@ class GoalService {
 
       return response;
     } catch (e) {
-      print('Error getting user stats: $e');
+      _logger.e('Error getting user stats: $e');
       return null;
     }
   }
@@ -227,7 +229,7 @@ class GoalService {
             'updated_at': DateTime.now().toIso8601String(),
           });
     } catch (e) {
-      print('Error updating user stats: $e');
+      _logger.e('Error updating user stats: $e');
     }
   }
 }

@@ -189,8 +189,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
               borderRadius: BorderRadius.circular(12),
               side: BorderSide(
                 color: isToday 
-                    ? Theme.of(context).colorScheme.primary.withOpacity(0.3)
-                    : Colors.grey.withOpacity(0.2),
+                    ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.3)
+                    : Colors.grey.withValues(alpha: 0.2),
                 width: isToday ? 2 : 1,
               ),
             ),
@@ -206,8 +206,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
                           color: isToday 
-                              ? Theme.of(context).colorScheme.primary.withOpacity(0.1)
-                              : Colors.grey.withOpacity(0.1),
+                              ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.1)
+                              : Colors.grey.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
@@ -327,7 +327,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                       decoration: BoxDecoration(
-                        color: Colors.green.withOpacity(0.1),
+                        color: Colors.green.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Row(

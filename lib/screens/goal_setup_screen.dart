@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import '../services/goal_service.dart';
 import '../services/auth_service.dart';
 
@@ -11,6 +12,7 @@ class GoalSetupScreen extends StatefulWidget {
 
 class _GoalSetupScreenState extends State<GoalSetupScreen> {
   final _formKey = GlobalKey<FormState>();
+  final Logger _logger = Logger();
   final _bigGoalController = TextEditingController();
   final _smallGoal1Controller = TextEditingController();
   final _smallGoal2Controller = TextEditingController();
@@ -47,7 +49,7 @@ class _GoalSetupScreenState extends State<GoalSetupScreen> {
         });
       }
     } catch (e) {
-      print('Error loading existing goals: $e');
+      _logger.e('Error loading existing goals: $e');
     }
   }
 
@@ -155,8 +157,8 @@ class _GoalSetupScreenState extends State<GoalSetupScreen> {
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
-                      colorScheme.primary.withOpacity(0.1),
-                      colorScheme.primary.withOpacity(0.05),
+                      colorScheme.primary.withValues(alpha: 0.1),
+                      colorScheme.primary.withValues(alpha: 0.05),
                     ],
                   ),
                   borderRadius: BorderRadius.circular(12),
@@ -267,9 +269,9 @@ class _GoalSetupScreenState extends State<GoalSetupScreen> {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Colors.blue.withOpacity(0.1),
+                  color: Colors.blue.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: Colors.blue.withOpacity(0.3)),
+                  border: Border.all(color: Colors.blue.withValues(alpha: 0.3)),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -327,8 +329,8 @@ class _GoalSetupScreenState extends State<GoalSetupScreen> {
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                 color: isBig 
-                    ? colorScheme.primary.withOpacity(0.1)
-                    : Colors.grey.withOpacity(0.1),
+                    ? colorScheme.primary.withValues(alpha: 0.1)
+                    : Colors.grey.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Icon(
@@ -373,16 +375,16 @@ class _GoalSetupScreenState extends State<GoalSetupScreen> {
               borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide(
                 color: isBig 
-                    ? colorScheme.primary.withOpacity(0.3)
-                    : Colors.grey.withOpacity(0.3),
+                    ? colorScheme.primary.withValues(alpha: 0.3)
+                    : Colors.grey.withValues(alpha: 0.3),
               ),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide(
                 color: isBig 
-                    ? colorScheme.primary.withOpacity(0.3)
-                    : Colors.grey.withOpacity(0.3),
+                    ? colorScheme.primary.withValues(alpha: 0.3)
+                    : Colors.grey.withValues(alpha: 0.3),
               ),
             ),
             focusedBorder: OutlineInputBorder(
@@ -394,8 +396,8 @@ class _GoalSetupScreenState extends State<GoalSetupScreen> {
             ),
             filled: true,
             fillColor: isBig 
-                ? colorScheme.primary.withOpacity(0.05)
-                : Colors.grey.withOpacity(0.05),
+                ? colorScheme.primary.withValues(alpha: 0.05)
+                : Colors.grey.withValues(alpha: 0.05),
           ),
           validator: (value) {
             if (value == null || value.trim().isEmpty) {

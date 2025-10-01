@@ -25,11 +25,11 @@ class ProgressIndicator extends StatelessWidget {
         color: colorScheme.surface,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: colorScheme.outline.withOpacity(0.2),
+          color: colorScheme.outline.withValues(alpha: 0.2),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -63,7 +63,7 @@ class ProgressIndicator extends StatelessWidget {
                           'Haladás',
                           style: TextStyle(
                             fontSize: 14,
-                            color: colorScheme.onSurface.withOpacity(0.7),
+                            color: colorScheme.onSurface.withValues(alpha: 0.7),
                           ),
                         ),
                         Text(
@@ -81,7 +81,7 @@ class ProgressIndicator extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8),
                       child: LinearProgressIndicator(
                         value: progress,
-                        backgroundColor: colorScheme.outline.withOpacity(0.2),
+                        backgroundColor: colorScheme.outline.withValues(alpha: 0.2),
                         valueColor: AlwaysStoppedAnimation<Color>(
                           completedGoals == totalGoals 
                               ? Colors.green 
@@ -99,8 +99,8 @@ class ProgressIndicator extends StatelessWidget {
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   color: completedGoals == totalGoals 
-                      ? Colors.green.withOpacity(0.1)
-                      : colorScheme.primary.withOpacity(0.1),
+                      ? Colors.green.withValues(alpha: 0.1)
+                      : colorScheme.primary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(
@@ -120,7 +120,7 @@ class ProgressIndicator extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               decoration: BoxDecoration(
-                color: Colors.green.withOpacity(0.1),
+                color: Colors.green.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Row(
@@ -175,7 +175,7 @@ class CompactProgressIndicator extends StatelessWidget {
             borderRadius: BorderRadius.circular(4),
             child: LinearProgressIndicator(
               value: progress,
-              backgroundColor: colorScheme.outline.withOpacity(0.2),
+              backgroundColor: colorScheme.outline.withValues(alpha: 0.2),
               valueColor: AlwaysStoppedAnimation<Color>(
                 completedGoals == totalGoals 
                     ? Colors.green 

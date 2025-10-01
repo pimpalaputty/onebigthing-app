@@ -1,9 +1,11 @@
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:logger/logger.dart';
 import '../config/supabase_config.dart';
 
 class AuthService {
   static final SupabaseClient _supabase = Supabase.instance.client;
+  static final Logger _logger = Logger();
   static final GoogleSignIn _googleSignIn = GoogleSignIn(
     clientId: SupabaseConfig.googleClientId,
     scopes: <String>['email', 'profile'],
@@ -19,8 +21,7 @@ class AuthService {
 
       return success;
     } catch (e) {
-      // Google sign in error: $e
-      print('Google sign in error: $e');
+      _logger.e('Google sign in error: $e');
       return false;
     }
   }

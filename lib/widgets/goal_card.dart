@@ -31,8 +31,8 @@ class GoalCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         side: BorderSide(
           color: isCompleted 
-              ? Colors.green.withOpacity(0.3)
-              : (isBigGoal ? colorScheme.primary.withOpacity(0.3) : Colors.grey.withOpacity(0.2)),
+              ? Colors.green.withValues(alpha: 0.3)
+              : (isBigGoal ? colorScheme.primary.withValues(alpha: 0.3) : Colors.grey.withValues(alpha: 0.2)),
           width: isBigGoal ? 2 : 1,
         ),
       ),
@@ -52,7 +52,7 @@ class GoalCard extends StatelessWidget {
                   shape: BoxShape.circle,
                   color: isCompleted 
                       ? Colors.green
-                      : (isBigGoal ? colorScheme.primary.withOpacity(0.1) : Colors.grey.withOpacity(0.1)),
+                      : (isBigGoal ? colorScheme.primary.withValues(alpha: 0.1) : Colors.grey.withValues(alpha: 0.1)),
                   border: Border.all(
                     color: isCompleted 
                         ? Colors.green
@@ -105,7 +105,7 @@ class GoalCard extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: colorScheme.primary.withOpacity(0.1),
+                    color: colorScheme.primary.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Icon(
@@ -149,14 +149,14 @@ class BigGoalCard extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: isCompleted
-              ? [Colors.green.withOpacity(0.1), Colors.green.withOpacity(0.05)]
-              : [colorScheme.primary.withOpacity(0.1), colorScheme.primary.withOpacity(0.05)],
+              ? [Colors.green.withValues(alpha: 0.1), Colors.green.withValues(alpha: 0.05)]
+              : [colorScheme.primary.withValues(alpha: 0.1), colorScheme.primary.withValues(alpha: 0.05)],
         ),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: isCompleted 
-              ? Colors.green.withOpacity(0.3)
-              : colorScheme.primary.withOpacity(0.3),
+              ? Colors.green.withValues(alpha: 0.3)
+              : colorScheme.primary.withValues(alpha: 0.3),
           width: 2,
         ),
       ),
@@ -186,7 +186,7 @@ class BigGoalCard extends StatelessWidget {
                         shape: BoxShape.circle,
                         color: isCompleted 
                             ? Colors.green
-                            : colorScheme.primary.withOpacity(0.1),
+                            : colorScheme.primary.withValues(alpha: 0.1),
                         border: Border.all(
                           color: isCompleted 
                               ? Colors.green
@@ -207,7 +207,7 @@ class BigGoalCard extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                       decoration: BoxDecoration(
-                        color: colorScheme.primary.withOpacity(0.1),
+                        color: colorScheme.primary.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Row(
