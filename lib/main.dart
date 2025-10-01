@@ -4,16 +4,25 @@ import 'config/supabase_config.dart';
 import 'screens/login_screen.dart';
 import 'screens/profile_screen.dart';
 import 'screens/main_navigation.dart';
+import 'services/auth_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // Supabase inicializálás
   await Supabase.initialize(
     url: SupabaseConfig.supabaseUrl,
     anonKey: SupabaseConfig.supabaseAnonKey,
   );
-  
+
+  // Google Sign-In inicializálás (v7.x requirement)
+  try {
+    await AuthService.initialize();
+  } catch (e) {
+    // Log error but continue - auth will retry initialization on first use
+    debugPrint('Failed to initialize AuthService: $e');
+  }
+
   runApp(const MyApp());
 }
 

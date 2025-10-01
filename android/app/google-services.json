@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "529923259303",
+    "project_id": "mano-cloud",
+    "storage_bucket": "mano-cloud.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:529923259303:android:onebigthing_app",
+        "android_client_info": {
+          "package_name": "eu.manodesign.onebigthing_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "529923259303-6ac2151j0an5dur0j37976679vj647q3.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "529923259303-hshkgvsm4o21u4r7b9r83gkikr5tek0t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "eu.manodesign.onebigthing_app",
+            "certificate_hash": "30dda8ac5ccd57214ee6b961f962ec240245ade2"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDummy-Key-For-Android-Google-Services"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "529923259303-6ac2151j0an5dur0j37976679vj647q3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
