@@ -133,3 +133,4 @@ public
 # Temporary folders
 tmp/
 temp/
+android/.kotlin
