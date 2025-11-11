@@ -15,13 +15,8 @@ void main() async {
     anonKey: SupabaseConfig.supabaseAnonKey,
   );
 
-  // Google Sign-In inicializálás (v7.x requirement)
-  try {
-    await AuthService.initialize();
-  } catch (e) {
-    // Log error but continue - auth will retry initialization on first use
-    debugPrint('Failed to initialize AuthService: $e');
-  }
+  // Google Sign-In inicializálás
+  await AuthService.initializeGoogleSignIn();
 
   runApp(const MyApp());
 }

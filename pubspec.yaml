@@ -38,14 +38,14 @@ dependencies:
   # Supabase
   supabase_flutter: ^2.5.6
 
-  # Google Sign In - Upgraded to 7.x (requires migration, see auth_service.dart)
-  google_sign_in: ^7.2.0
-
   # HTTP requests
   http: ^1.2.2
 
   # Logging
   logger: ^2.4.0
+
+  # Google Sign-In
+  google_sign_in: ^7.0.0
 
 dev_dependencies:
   flutter_test:

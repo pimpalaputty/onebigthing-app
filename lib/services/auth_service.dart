@@ -1,113 +1,142 @@
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:logger/logger.dart';
 import 'package:flutter/foundation.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import '../config/supabase_config.dart';
 
 class AuthService {
   static final SupabaseClient _supabase = Supabase.instance.client;
   static final Logger _logger = Logger();
 
-  // Google Sign-In v7.x - uses singleton instance
+  // Google Sign-In instance (singleton pattern for v7.x)
   static final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
-  static bool _isInitialized = false;
 
-  // Initialize Google Sign-In (required for v7.x)
-  // Must be called before any other Google Sign-In methods
-  static Future<void> initialize() async {
-    if (_isInitialized) return;
-
+  // Initialize Google Sign-In (call this at app startup)
+  static Future<void> initializeGoogleSignIn() async {
     try {
-      // Platform-specific initialization
-      await _googleSignIn.initialize(
-        clientId: kIsWeb ? SupabaseConfig.googleClientId : null,
-        serverClientId: kIsWeb ? SupabaseConfig.googleClientId : SupabaseConfig.googleAndroidClientId,
-      );
-      _isInitialized = true;
+      // Web platform doesn't support serverClientId parameter
+      // It reads the client ID from the meta tag in index.html
+      if (kIsWeb) {
+        await _googleSignIn.initialize();
+      } else {
+        // Mobile platforms (iOS, Android) need serverClientId
+        await _googleSignIn.initialize(
+          serverClientId: SupabaseConfig.googleWebClientId,
+        );
+      }
       _logger.i('Google Sign-In initialized successfully');
-
-      // Listen to authentication events (v7.x pattern)
-      _googleSignIn.authenticationEvents.listen(
-        (event) {
-          // Pattern match on authentication event type
-          final user = switch (event) {
-            GoogleSignInAuthenticationEventSignIn(:final user) => user,
-            GoogleSignInAuthenticationEventSignOut() => null,
-          };
-          _logger.d('Auth event: ${user?.email ?? "signed out"}');
-        },
-        onError: (error) {
-          _logger.e('Auth event error: $error');
-        },
-      );
     } catch (e) {
       _logger.e('Failed to initialize Google Sign-In: $e');
-      rethrow;
     }
   }
 
-  // Ensure Google Sign-In is initialized
-  static Future<void> _ensureInitialized() async {
-    if (!_isInitialized) {
-      await initialize();
-    }
-  }
-
-  // Google bejelentkezés - platform specifikus implementáció
+  // Google Sign-In authentication
   static Future<bool> signInWithGoogle() async {
     try {
-      await _ensureInitialized();
-
       if (kIsWeb) {
-        // Web: Supabase OAuth használata
-        final bool success = await _supabase.auth.signInWithOAuth(
+        // Web platform: Use Supabase OAuth (redirect flow)
+        // This provides the best UX with Google One Tap on web
+        await _supabase.auth.signInWithOAuth(
           OAuthProvider.google,
+          redirectTo: kIsWeb ? null : 'eu.manodesign.onebigthing_app://auth/callback',
         );
-        return success;
+
+        // OAuth redirects to Google, so we return true immediately
+        // The actual auth happens after redirect
+        _logger.i('Google OAuth initiated');
+        return true;
       } else {
-        // Android/iOS: Natív Google Sign-In v7.x + Supabase token exchange
+        // Mobile platforms: Use native Google Sign-In
+        final GoogleSignInAccount? googleUser = await _googleSignIn.authenticate();
 
-        // Check if platform supports authenticate method
-        if (!_googleSignIn.supportsAuthenticate()) {
-          _logger.e('Platform does not support Google authentication');
+        if (googleUser == null) {
+          _logger.w('Google Sign-In cancelled by user');
           return false;
         }
 
-        // Authenticate with Google (v7.x API)
-        final GoogleSignInAccount googleUser = await _googleSignIn.authenticate();
-
-        // Get authentication tokens (v7.x API - authentication is now synchronous)
+        // Get authentication details (idToken only in v7.x)
         final GoogleSignInAuthentication googleAuth = googleUser.authentication;
-
-        // Get authorization for required scopes to obtain access token
-        final GoogleSignInClientAuthorization? authorization =
-            await googleUser.authorizationClient.authorizationForScopes(['email', 'profile']);
-
         final String? idToken = googleAuth.idToken;
-        final String? accessToken = authorization?.accessToken;
 
-        if (idToken == null || accessToken == null) {
-          _logger.e('Failed to get Google authentication tokens');
+        if (idToken == null) {
+          _logger.e('Failed to get ID token from Google Sign-In');
           return false;
         }
 
-        // Supabase bejelentkezés Google token-ekkel
+        // Sign in to Supabase with Google credentials
         final AuthResponse response = await _supabase.auth.signInWithIdToken(
           provider: OAuthProvider.google,
           idToken: idToken,
-          accessToken: accessToken,
         );
 
         if (response.user != null) {
           _logger.i('Successfully signed in with Google: ${response.user!.email}');
           return true;
         } else {
-          _logger.e('Supabase sign in failed');
+          _logger.e('Failed to authenticate with Supabase');
           return false;
         }
       }
     } catch (e) {
-      _logger.e('Google sign in error: $e');
+      _logger.e('Google Sign-In error: $e');
+      return false;
+    }
+  }
+
+  // Magic link küldése email címre
+  static Future<bool> sendMagicLink(String email) async {
+    try {
+      // Email cím validáció
+      if (email.isEmpty || !_isValidEmail(email)) {
+        _logger.w('Invalid email address: $email');
+        return false;
+      }
+
+      // Magic link küldése OTP-vel
+      await _supabase.auth.signInWithOtp(
+        email: email,
+        emailRedirectTo: kIsWeb
+            ? null
+            : 'eu.manodesign.onebigthing_app://auth/confirm',
+      );
+
+      _logger.i('Magic link sent successfully to: $email');
+      return true;
+    } catch (e) {
+      _logger.e('Failed to send magic link: $e');
+      return false;
+    }
+  }
+
+  // Email cím validáció
+  static bool _isValidEmail(String email) {
+    final emailRegex = RegExp(
+      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+    );
+    return emailRegex.hasMatch(email);
+  }
+
+  // OTP token ellenőrzése (opcionális, ha nem magic link-et használsz)
+  static Future<bool> verifyOtp({
+    required String email,
+    required String token,
+  }) async {
+    try {
+      final response = await _supabase.auth.verifyOTP(
+        email: email,
+        token: token,
+        type: OtpType.email,
+      );
+
+      if (response.user != null) {
+        _logger.i('OTP verified successfully for: $email');
+        return true;
+      } else {
+        _logger.e('OTP verification failed');
+        return false;
+      }
+    } catch (e) {
+      _logger.e('OTP verification error: $e');
       return false;
     }
   }
@@ -115,21 +144,14 @@ class AuthService {
   // Kijelentkezés
   static Future<void> signOut() async {
     try {
-      await _ensureInitialized();
-
-      // Always sign out from Supabase first
+      // Sign out from Google Sign-In first
+      await _googleSignIn.signOut();
+      // Then sign out from Supabase
       await _supabase.auth.signOut();
-
-      // Then sign out from Google (if not on web)
-      if (!kIsWeb) {
-        try {
-          await _googleSignIn.signOut();
-        } catch (e) {
-          _logger.w('Google sign out warning: $e');
-        }
-      }
+      _logger.i('User signed out successfully');
     } catch (e) {
       _logger.e('Sign out error: $e');
+      rethrow;
     }
   }
 
