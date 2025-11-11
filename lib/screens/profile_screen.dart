@@ -25,11 +25,12 @@ class ProfileScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
             const SizedBox(height: 20),
             // Profil kép és alapadatok
             Row(
@@ -110,9 +111,9 @@ class ProfileScreen extends StatelessWidget {
                   : 'N/A',
               Icons.calendar_today,
             ),
-            
-            const Spacer(),
-            
+
+            const SizedBox(height: 40),
+
             // Kijelentkezés gomb
             SizedBox(
               width: double.infinity,
@@ -133,6 +134,7 @@ class ProfileScreen extends StatelessWidget {
               ),
             ),
           ],
+        ),
         ),
       ),
     );
