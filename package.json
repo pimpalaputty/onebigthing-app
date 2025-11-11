@@ -4,7 +4,9 @@
   "description": "One Big Thing - Daily Goal Tracking App",
   "scripts": {
     "dev": "echo 'No dev command needed'",
-    "deploy": "vercel --prod"
+    "build": "bash ./scripts/vercel_build.sh",
+    "deploy": "vercel --prod",
+    "build-local": "flutter build web --release && rm -rf public/* && cp -r build/web/* public/"
   },
   "engines": {
     "node": ">=18.0.0"

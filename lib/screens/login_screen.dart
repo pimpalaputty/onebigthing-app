@@ -128,7 +128,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: 32),
                 const Text(
-                  'Üdvözöljük!',
+                  'Hello!',
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,

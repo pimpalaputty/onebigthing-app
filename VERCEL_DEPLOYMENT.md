@@ -24,7 +24,7 @@
 1. Push your code to GitHub
 2. Go to [vercel.com](https://vercel.com)
 3. Import your GitHub repository
-4. Vercel will automatically detect the Flutter project
+4. Keep the default framework preset (Other) so Vercel runs `npm run build`
 
 ## 🔧 Environment Variables
 
@@ -42,18 +42,33 @@ GOOGLE_CLIENT_ID=529923259303-6ac2151j0an5dur0j37976679vj647q3.apps.googleuserco
 onebigthing_app/
 ├── vercel.json          # Vercel configuration
 ├── package.json         # Node.js package info
-├── .vercelignore        # Files to ignore during deployment
-├── deploy.sh           # Deployment script
-└── build/web/          # Flutter web build output
+├── scripts/
+│   └── vercel_build.sh  # Installs Flutter and builds the web bundle
+├── deploy.sh            # Manual deployment helper
+└── public/              # Final Flutter web assets Vercel serves
 ```
 
 ## 🛠️ Build Configuration
 
 The `vercel.json` file configures:
-- Build command: `flutter build web --release`
-- Output directory: `build/web`
-- Install command: `flutter pub get`
-- Caching headers for optimal performance
+- SPA routing so every path serves `index.html`
+- No custom build or install commands (handled in `package.json`)
+- Additional rewrites can be added here if needed
+
+### 🧱 Build Workflow
+
+Vercel runs the Node build command from `package.json`:
+
+```bash
+npm run build
+```
+
+That delegates to `scripts/vercel_build.sh`, which:
+- Downloads the Flutter SDK (override with `FLUTTER_VERSION` env var if required)
+- Runs `flutter pub get` and builds the web bundle
+- Copies `build/web/` into the repo’s `public/` folder for Vercel to deploy
+
+> Tip: If you already have a local `flutter build web` output, run `npm run build` locally so the same script is exercised before pushing.
 
 ## 🔄 Automatic Deployments
 
@@ -68,6 +83,7 @@ Once connected to GitHub:
 - Check Flutter version compatibility
 - Ensure all dependencies are in `pubspec.yaml`
 - Verify environment variables are set
+- Confirm Vercel can download the Flutter SDK (retry or pin `FLUTTER_VERSION` if a release is unavailable)
 
 ### Runtime Issues
 - Check browser console for errors
