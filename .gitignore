@@ -124,9 +124,6 @@ pids
 
 # Gatsby files
 .cache/
-/public/*
-!public/.gitkeep
-
 # Storybook build outputs
 .out
 .storybook-out
